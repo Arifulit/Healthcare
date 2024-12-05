@@ -17,9 +17,9 @@
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="@string/contact_number1"
-        android:importantForAutofill="no"
-        android:inputType="numberDecimal"
-        android:maxLength="10"
+
+        android:inputType="textPersonName"
+
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
@@ -43,7 +43,7 @@
         android:hint="@string/pin_code"
         android:importantForAutofill="no"
         android:inputType="numberDecimal"
-        android:maxLength="6"
+
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"

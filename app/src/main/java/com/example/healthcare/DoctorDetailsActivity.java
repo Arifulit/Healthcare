@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class DoctorDetailsActivity extends AppCompatActivity {
     private String[][] doctor_details1 = {
-            {"Doctor Name : Dr. Ahsan Habib", "Hospital Address : Dhanmondi, Dhaka", "Exp : 10yrs", "Mobile No:01712345678", "1200"},
+            {"Doctor Name : Dr. Ahsan Habib", "Hospital Address : Dhanmondi, Dhaka", "Exp : 10yrs", "Mobile No:0174658666", "500"},
             {"Doctor Name : Dr. Rubaiya Sultana", "Hospital Address : Banani, Dhaka", "Exp : 12yrs", "Mobile No:01898765432", "1500"},
             {"Doctor Name : Dr. Md. Tanvir Hossain", "Hospital Address : Mirpur, Dhaka", "Exp : 8yrs", "Mobile No:01911223344", "1000"},
             {"Doctor Name : Dr. Naznin Akter", "Hospital Address : Uttara, Dhaka", "Exp : 7yrs", "Mobile No:01699887766", "1100"},
@@ -23,7 +23,7 @@ public class DoctorDetailsActivity extends AppCompatActivity {
     };
 
     private String[][] doctor_details2 = {
-            {"Doctor Name : Dr. Nusrat Jahan", "Hospital Address : Dhanmondi, Dhaka", "Exp : 5yrs", "Mobile No:01712345678", "1200"},
+            {"Doctor Name : Dr. Nusrat Jahan", "Hospital Address : Dhanmondi, Dhaka", "Exp : 5yrs", "Mobile No:01712345678", " 1200"},
             {"Doctor Name : Dr. Mahmudul Hasan", "Hospital Address : Banani, Dhaka", "Exp : 15yrs", "Mobile No:01898765432", "1500"},
             {"Doctor Name : Dr. Farhana Haque", "Hospital Address : Mirpur, Dhaka", "Exp : 8yrs", "Mobile No:01911223344", "1000"},
             {"Doctor Name : Dr. Saiful Islam", "Hospital Address : Uttara, Dhaka", "Exp : 6yrs", "Mobile No:01699887766", "1100"},
@@ -109,17 +109,34 @@ public class DoctorDetailsActivity extends AppCompatActivity {
         ListView lst = findViewById(R.id.listViewDD);
         lst.setAdapter(sa);
 
+//        lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent it = new Intent(DoctorDetailsActivity.this,BookAppointmentActivity.class);
+//                it.putExtra("Text1", title);
+//                it.putExtra("Text2", doctor_details[i][0]);
+//                it.putExtra("Text3", doctor_details[i][1]);
+//                it.putExtra("Text4", doctor_details[i][3]);
+//                it.putExtra("Text5", doctor_details[i][4]);
+//                startActivity(it);
+//            }
+//        });
+
+
         lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent it = new Intent(DoctorDetailsActivity.this,BookAppointmentActivity.class);
-                it.putExtra("Text1", title);
-                it.putExtra("Text2", doctor_details[i][0]);
-                it.putExtra("Text3", doctor_details[i][1]);
-                it.putExtra("Text4", doctor_details[i][3]);
-                it.putExtra("Text5", doctor_details[i][4]);
+            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+                Intent it= new Intent(DoctorDetailsActivity.this,BookAppointmentActivity.class);
+                it.putExtra("text1",title);
+                it.putExtra("text2",doctor_details[i][0]);
+                it.putExtra("text3",doctor_details[i][1]);
+                it.putExtra("text4",doctor_details[i][3]);
+                it.putExtra("text5",doctor_details[i][4]);
                 startActivity(it);
+
             }
         });
+
+
     }
 }

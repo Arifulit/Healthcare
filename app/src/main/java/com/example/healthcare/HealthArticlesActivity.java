@@ -66,8 +66,8 @@ public class HealthArticlesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent it = new Intent(HealthArticlesActivity.this,HealthArticlesDetailsActivity.class);
-                it.putExtra("Text1", health_details[i][0]);
-                it.putExtra("Text2", images[i]);
+                it.putExtra("text1", health_details[i][0]);
+                it.putExtra("text2", images[i]);
                 startActivity(it);
             }
         });
