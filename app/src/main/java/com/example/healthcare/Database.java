@@ -148,3 +148,131 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 }
+
+
+
+//package com.example.healthcare;
+//
+//import android.content.Context;
+//import android.widget.Toast;
+//
+//import com.google.firebase.database.DataSnapshot;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
+//
+//import java.util.ArrayList;
+//
+//public class Database {
+//    private Context context;
+//    private DatabaseReference databaseReference;
+//
+//    public Database(Context context) {
+//        this.context = context;
+//        this.databaseReference = FirebaseDatabase.getInstance().getReference();
+//    }
+//
+//    // User Registration
+//    public void register(String username, String email, String password) {
+//        DatabaseReference usersRef = databaseReference.child("users");
+//        User user = new User(username, email, password); // Create a user object
+//        usersRef.child(username).setValue(user)
+//                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Record Inserted", Toast.LENGTH_SHORT).show())
+//                .addOnFailureListener(e -> Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+//    }
+//
+//    // User Login
+//    public void login(String username, String password, LoginCallback callback) {
+//        DatabaseReference usersRef = databaseReference.child("users").child(username);
+//        usersRef.get().addOnSuccessListener(dataSnapshot -> {
+//            if (dataSnapshot.exists()) {
+//                User user = dataSnapshot.getValue(User.class);
+//                if (user != null && user.password.equals(password)) {
+//                    callback.onSuccess();
+//                } else {
+//                    callback.onFailure("Invalid credentials");
+//                }
+//            } else {
+//                callback.onFailure("User not found");
+//            }
+//        }).addOnFailureListener(e -> callback.onFailure("Error: " + e.getMessage()));
+//    }
+//
+//    public interface LoginCallback {
+//        void onSuccess();
+//        void onFailure(String errorMessage);
+//    }
+//
+//    // Add Item to Cart
+//    public void addCart(String username, String product, float price, String otype) {
+//        DatabaseReference cartRef = databaseReference.child("cart").child(username);
+//        String productId = cartRef.push().getKey();
+//        CartItem cartItem = new CartItem(product, price, otype);
+//        if (productId != null) {
+//            cartRef.child(productId).setValue(cartItem)
+//                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Item added to cart", Toast.LENGTH_SHORT).show())
+//                    .addOnFailureListener(e -> Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+//        }
+//    }
+//
+//    // Get Cart Data
+//    public void getCartData(String username, CartCallback callback) {
+//        DatabaseReference cartRef = databaseReference.child("cart").child(username);
+//        cartRef.get().addOnSuccessListener(dataSnapshot -> {
+//            ArrayList<CartItem> cartItems = new ArrayList<>();
+//            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                CartItem item = snapshot.getValue(CartItem.class);
+//                if (item != null) {
+//                    cartItems.add(item);
+//                }
+//            }
+//            callback.onSuccess(cartItems);
+//        }).addOnFailureListener(e -> callback.onFailure("Error: " + e.getMessage()));
+//    }
+//
+//    public interface CartCallback {
+//        void onSuccess(ArrayList<CartItem> cartItems);
+//        void onFailure(String errorMessage);
+//    }
+//
+//    // Remove Cart
+//    public void removeCart(String username) {
+//        DatabaseReference cartRef = databaseReference.child("cart").child(username);
+//        cartRef.removeValue()
+//                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Cart cleared", Toast.LENGTH_SHORT).show())
+//                .addOnFailureListener(e -> Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+//    }
+//
+//    // Add Order
+//    public void addOrder(String username, String fullname, String address, String contact, int pincode, String date, String time, float price, String otype) {
+//        DatabaseReference orderRef = databaseReference.child("orders").child(username);
+//        String orderId = orderRef.push().getKey();
+//        Order order = new Order(fullname, address, contact, pincode, date, time, price, otype);
+//        if (orderId != null) {
+//            orderRef.child(orderId).setValue(order)
+//                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Order placed successfully", Toast.LENGTH_SHORT).show())
+//                    .addOnFailureListener(e -> Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+//        }
+//    }
+//
+//    // Get Order Data
+//    public void getOrderData(String username, OrderCallback callback) {
+//        DatabaseReference orderRef = databaseReference.child("orders").child(username);
+//        orderRef.get().addOnSuccessListener(dataSnapshot -> {
+//            ArrayList<Order> orders = new ArrayList<>();
+//            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                Order order = snapshot.getValue(Order.class);
+//                if (order != null) {
+//                    orders.add(order);
+//                }
+//            }
+//            callback.onSuccess(orders);
+//        }).addOnFailureListener(e -> callback.onFailure("Error: " + e.getMessage()));
+//    }
+//
+//    public interface OrderCallback {
+//        void onSuccess(ArrayList<Order> orders);
+//        void onFailure(String errorMessage);
+//    }
+//}
+
+

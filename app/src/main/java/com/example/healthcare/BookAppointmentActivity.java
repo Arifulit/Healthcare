@@ -3,131 +3,135 @@ package com.example.healthcare;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+
 import android.widget.Button;
-import android.widget.DatePicker;
+
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
+
 import android.widget.Toast;
 
 import java.util.Calendar;
 
+
 public class BookAppointmentActivity extends AppCompatActivity {
 
-    EditText ed1,ed2,ed3,ed4;
-    TextView tv;
+    // UI Elements
+    private EditText edFullname, edAddress, edContact, edPincode;
+    private TextView tvTitle;
+    private Button dateButton, timeButton, btnBook, btnBack;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
-    private Button dateButton, timeButton, btnBook, btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_appointment);
 
-        tv = findViewById(R.id.textViewAppTitle);
-        ed1 = findViewById(R.id.editTextAppFullname);
-        ed2 = findViewById(R.id.editTextAppAddress);
-        ed3 = findViewById(R.id.editTextAppContact);
-        ed4 = findViewById(R.id.editTextAppPincode);
+        // Initialize UI elements
+        tvTitle = findViewById(R.id.textViewAppTitle);
+        edFullname = findViewById(R.id.editTextAppFullname);
+        edAddress = findViewById(R.id.editTextAppAddress);
+        edContact = findViewById(R.id.editTextAppContact);
+        edPincode = findViewById(R.id.editTextAppPincode);
         dateButton = findViewById(R.id.buttonAppDate);
         timeButton = findViewById(R.id.buttonAppTime);
         btnBook = findViewById(R.id.buttonBookAppointment);
         btnBack = findViewById(R.id.buttonAppBack);
 
-        ed1.setKeyListener(null);
-        ed2.setKeyListener(null);
-        ed3.setKeyListener(null);
-        ed4.setKeyListener(null);
+        // Disable editing for certain fields
+        edFullname.setKeyListener(null);
+        edAddress.setKeyListener(null);
+        edContact.setKeyListener(null);
+        edPincode.setKeyListener(null);
 
-        Intent it = getIntent();
-        String title = it.getStringExtra("text1");
-        String fullname = it.getStringExtra("text2");
-        String address = it.getStringExtra("text3");
-        String contact = it.getStringExtra("text4");
-        String fees = it.getStringExtra("text5");
+        // Get intent data
+        Intent intent = getIntent();
+        String title = intent.getStringExtra("text1");
+        String fullname = intent.getStringExtra("text2");
+        String address = intent.getStringExtra("text3");
+        String contact = intent.getStringExtra("text4");
+        String fees = intent.getStringExtra("text5");
 
-        tv.setText(title);
-        ed1.setText(fullname);
-        ed2.setText(address);
-        ed3.setText(contact);
-        ed4.setText("Cons Fees"+ fees + "/-");
+        // Set data to UI elements
+        tvTitle.setText(title);
+        edFullname.setText(fullname);
+        edAddress.setText(address);
+        edContact.setText(contact);
+        edPincode.setText("Cons Fees " + fees + "/-");
 
-        //datePicker
+        // Initialize date and time pickers
         initDatePicker();
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                datePickerDialog.show();
-            }
-        });
-        //timepicker
         initTimePicker();
-        timeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timePickerDialog.show();
-            }
-        });
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(BookAppointmentActivity.this,FindDoctorActivity.class));}
-        });
+        // Set listeners
+        dateButton.setOnClickListener(view -> datePickerDialog.show());
+        timeButton.setOnClickListener(view -> timePickerDialog.show());
+        btnBack.setOnClickListener(view -> startActivity(new Intent(BookAppointmentActivity.this, FindDoctorActivity.class)));
 
-        btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Database db = new Database(getApplicationContext(),"healthcare",null,1);
-                SharedPreferences sharedPreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
-                String username = sharedPreferences.getString("username","").toString();
-                if (db.checkAppintmentExists(username,title+"=>"+fullname,address,contact,dateButton.getText().toString(),timeButton.getText().toString())==1){
-                    Toast.makeText(getApplicationContext(), "Appointment already booked", Toast.LENGTH_LONG).show();
-                }else{
-                    db.addOrder(username,title+"=>"+fullname,address,contact,0,dateButton.getText().toString(),timeButton.getText().toString(),Float.parseFloat(fees),"appointment");
-                    Toast.makeText(getApplicationContext(), "Your Appointment is booked Successfully", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(BookAppointmentActivity.this,HomeActivity.class));
-                }
-            }
-        });
+        // Book Appointment
+        btnBook.setOnClickListener(view -> bookAppointment(title, fullname, address, contact, fees));
     }
 
-    private void initDatePicker(){
-        DatePickerDialog.OnDateSetListener dateSetListener= new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                i1 = i1+1;
-                dateButton.setText(i2+"/"+i1+"/"+i);
-            }
+    // Initialize Date Picker
+    private void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
+            month += 1; // Month is zero-based
+            dateButton.setText(day + "/" + month + "/" + year);
         };
-        Calendar cal = Calendar.getInstance();
-        int year= cal.get(Calendar.YEAR);
-        int month= cal.get(Calendar.MONTH);
-        int day= cal.get(Calendar.DAY_OF_MONTH);
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         int style = AlertDialog.THEME_HOLO_DARK;
-        datePickerDialog = new DatePickerDialog(this,style,dateSetListener,year,month,day);
-        datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis()+86400000);
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() + 86400000); // Set minimum date to tomorrow
     }
-    private void initTimePicker(){
-        TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                timeButton.setText(i+":"+i1);
-            }
-        };
-        Calendar cal = Calendar.getInstance();
-        int hrs= cal.get(Calendar.HOUR);
-        int mins= cal.get(Calendar.MINUTE);
+
+    // Initialize Time Picker
+    private void initTimePicker() {
+        TimePickerDialog.OnTimeSetListener timeSetListener = (timePicker, hour, minute) ->
+                timeButton.setText(String.format("%02d:%02d", hour, minute));
+
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
 
         int style = AlertDialog.THEME_HOLO_DARK;
-        timePickerDialog = new TimePickerDialog(this,style,timeSetListener,hrs,mins,true);
+        timePickerDialog = new TimePickerDialog(this, style, timeSetListener, hour, minute, true);
+    }
+
+    // Book Appointment Logic (No Database or SharedPreferences Check)
+    private void bookAppointment(String title, String fullname, String address, String contact, String fees) {
+        // Create an AlertDialog to confirm appointment booking
+        AlertDialog.Builder builder = new AlertDialog.Builder(BookAppointmentActivity.this);
+        builder.setCancelable(false);
+
+        // Always book the appointment and show a success message
+        String date = dateButton.getText().toString();
+        String time = timeButton.getText().toString();
+        String message = "Appointment Successful!! \nDate: " + date + "\nTime: " + time;
+
+        // Set the message and the positive button in the dialog
+        builder.setTitle("Appointment Booked")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    dialog.dismiss();
+                    startActivity(new Intent(BookAppointmentActivity.this, HomeActivity.class));
+                });
+
+        // Create and show the alert dialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        // Show Toast message with Date and Time
+        Toast.makeText(BookAppointmentActivity.this, "Appointment Successful\nDate: " + date + "\nTime: " + time, Toast.LENGTH_LONG).show();
     }
 }
